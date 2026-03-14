@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aky Baro V2 - Chính Thức</title>
+    <title>Aky Baro V2 - Máy Chủ Chính Thức</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,6 +11,7 @@
         :root { 
             --p: #00ff88; --b: #00d4ff; --g: #ffd700; --d: #ff4757; --w: #ffa502; 
             --dk: #0a0a0f; --v: #8b5cf6; --r: #ff006e; --prem: #c084fc; --ram: #3b82f6;
+            --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c;
         }
         body { font-family: 'Roboto', sans-serif; background: var(--dk); color: #fff; min-height: 100vh; padding-bottom: 80px; overflow-x: hidden; }
         
@@ -60,6 +61,9 @@
         .btn-v { background: linear-gradient(135deg, var(--v), #6d28d9); color: #fff; }
         .btn-prem { background: linear-gradient(135deg, var(--prem), #8b5cf6); color: #fff; }
         .btn-ram { background: linear-gradient(135deg, var(--ram), #2563eb); color: #fff; }
+        .btn-success { background: linear-gradient(135deg, var(--success), #27ae60); color: #fff; }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #e67e22); color: #fff; }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #c0392b); color: #fff; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         
         .sec { display: none; animation: fadeIn 0.5s; } 
@@ -198,6 +202,26 @@
         .file p { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
         .file small { display: block; margin-top: 8px; color: var(--g); font-size: 0.75rem; }
         
+        /* File chạy */
+        .run-file-btn {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .run-file-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,136,0.3);
+        }
+        
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; overflow-x: auto; }
         .tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-weight: 500; color: rgba(255,255,255,0.6); border: none; background: transparent; font-size: 0.8rem; white-space: nowrap; min-width: 80px; }
         .tab.act { background: rgba(0,255,136,0.2); color: var(--p); box-shadow: 0 0 15px rgba(0,255,136,0.2); }
@@ -319,6 +343,28 @@
         .platform-btn.android i { color: #3ddc84; }
         .platform-btn.ios i { color: #007aff; }
         
+        /* Admin User List */
+        .user-list { max-height: 400px; overflow-y: auto; margin-bottom: 20px; }
+        .user-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; 
+            margin-bottom: 10px; border-left: 3px solid var(--p);
+        }
+        .user-info h4 { font-size: 1rem; margin-bottom: 5px; }
+        .user-info small { color: rgba(255,255,255,0.5); font-size: 0.7rem; }
+        .user-actions { display: flex; gap: 5px; }
+        .user-actions button { padding: 5px 10px; border: none; border-radius: 5px; font-size: 0.7rem; cursor: pointer; }
+        .user-locked { opacity: 0.5; filter: grayscale(0.5); }
+        .system-maintenance {
+            background: var(--danger);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
         @media (max-width: 400px) {
             .grid { grid-template-columns: repeat(2, 1fr); }
             .bags { grid-template-columns: 1fr; }
@@ -394,16 +440,21 @@
     <div class="bg"></div>
 
     <header class="hd" id="head" style="display:none">
-        <h1><i class="fas fa-crosshairs"></i> AKY BARO V2</h1>
+        <h1><i class="fas fa-crosshairs"></i> AKY BARO V2 - MÁY CHỦ</h1>
         <div class="wb"><i class="fas fa-wallet"></i> <span id="bal">0</span>đ</div>
     </header>
 
     <div class="ct">
+        <!-- System Maintenance Warning -->
+        <div id="maintenanceWarning" class="system-maintenance" style="display:none">
+            <i class="fas fa-exclamation-triangle"></i> HỆ THỐNG ĐANG BẢO TRÌ - VUI LÒNG QUAY LẠI SAU
+        </div>
+    
         <!-- Login -->
         <div class="login" id="login">
             <div class="icon"><i class="fas fa-crosshairs" style="color:var(--p)"></i></div>
             <h1 class="brand">AKY BARO V2</h1>
-            <p style="color:rgba(255,255,255,0.5);margin-bottom:30px">Free Fire Ultimate Tool</p>
+            <p style="color:rgba(255,255,255,0.5);margin-bottom:30px">Free Fire Ultimate Tool - Máy Chủ Chính Thức</p>
 
             <input type="text" class="inp" id="user" placeholder="Tên đăng nhập...">
             <input type="password" class="inp" id="pass" placeholder="Mật khẩu...">
@@ -485,6 +536,14 @@
                     <div class="admin-stat">
                         <b id="admin-pending">0</b>
                         <span>Chờ duyệt</span>
+                    </div>
+                    <div class="admin-stat">
+                        <b id="admin-premium">0</b>
+                        <span>Premium</span>
+                    </div>
+                    <div class="admin-stat">
+                        <b id="admin-locked">0</b>
+                        <span>Bị khóa</span>
                     </div>
                 </div>
                 <button class="btn btn-r" onclick="go('admin')">Quản Lý Hệ Thống</button>
@@ -624,35 +683,45 @@
                 
                 <div class="file" onclick="buyFile(50000, 'M1887')">
                     <b>50.000đ</b>
-                    <p><b>Chuyên M1887</b></p>
+                    <p><b>Chuyên M1887 - NHẸ TÂM, BÁM TÂM</b></p>
                     <small>Chỉ bắn phòng, không khuyến khích đi rank</small>
+                    <div class="run-file-btn" onclick="runFile(50000, event, 'android')">🚀 CHẠY FILE 50K - NHẸ TÂM</div>
+                    <div class="run-file-btn" onclick="runFile(50000, event, 'ios')" style="background:linear-gradient(135deg,#007aff,#0051a8);color:#fff;margin-top:5px">🍎 CHẠY FILE 50K - NHẸ TÂM (iOS)</div>
                 </div>
 
                 <div class="file hot" onclick="buyFile(150000, 'Best Seller')">
                     <span class="badge">BÁN CHẠY</span>
                     <b>150.000đ</b>
-                    <p><b>Ngon - Bổ - Rẻ</b></p>
+                    <p><b>BÁM TÂM, NHẸ ĐẦU - LÀM RIÊNG TỪNG MÁY</b></p>
                     <small>Bản bán chạy nhất, đặc biệt làm riêng từng máy</small>
+                    <div class="run-file-btn" onclick="runFile(150000, event, 'android')">🚀 CHẠY FILE 150K - BÁM TÂM</div>
+                    <div class="run-file-btn" onclick="runFile(150000, event, 'ios')" style="background:linear-gradient(135deg,#007aff,#0051a8);color:#fff;margin-top:5px">🍎 CHẠY FILE 150K (iOS)</div>
                 </div>
 
                 <div class="file" onclick="buyFile(300000, 'Pro')">
                     <b>300.000đ</b>
-                    <p><b>Cực Ngon</b></p>
+                    <p><b>BÁM TÂM, NHẸ ĐẦU, AIM ẨN</b></p>
                     <small>Nhấp hay kéo gì cũng mượt, đi kèo tiền, check không ra, an toàn 1000%</small>
+                    <div class="run-file-btn" onclick="runFile(300000, event, 'android')">🚀 CHẠY FILE 300K - AIM ẨN</div>
+                    <div class="run-file-btn" onclick="runFile(300000, event, 'ios')" style="background:linear-gradient(135deg,#007aff,#0051a8);color:#fff;margin-top:5px">🍎 CHẠY FILE 300K (iOS)</div>
                 </div>
 
                 <div class="file best" onclick="buyFile(500000, 'Ultra')">
                     <span class="badge">ĐÁNG MUA</span>
                     <b>500.000đ</b>
-                    <p><b>Đáng Mua Nhất</b></p>
+                    <p><b>SIÊU BÁ - KÉO NHẸ LÀ LÊN ĐẦU</b></p>
                     <small>Chỉ cần kéo nhẹ là full đỏ, không full đỏ không lấy tiền</small>
+                    <div class="run-file-btn" onclick="runFile(500000, event, 'android')">🚀 CHẠY FILE 500K - SIÊU BÁ</div>
+                    <div class="run-file-btn" onclick="runFile(500000, event, 'ios')" style="background:linear-gradient(135deg,#007aff,#0051a8);color:#fff;margin-top:5px">🍎 CHẠY FILE 500K (iOS)</div>
                 </div>
 
                 <div class="file max" onclick="buyFile(1000000, 'Max')">
                     <span class="badge">VIP MAX</span>
                     <b>1.000.000đ</b>
-                    <p><b>BÁ CHỈ</b></p>
-                    <small>Ngon nhất! Ngón chân kéo cũng bay đầu, cân rank, cân sàn, cân tất cả, live Bác Gấu cũng không ban</small>
+                    <p><b>QUÁ BÁ - NGÓN CHÂN KÉO CŨNG LÊN ĐẦU</b></p>
+                    <small>Ngon nhất! Ngón chân kéo cũng bay đầu, cân rank, cân sàn, cân tất cả</small>
+                    <div class="run-file-btn" onclick="runFile(1000000, event, 'android')">🚀 CHẠY FILE 1TR - QUÁ BÁ</div>
+                    <div class="run-file-btn" onclick="runFile(1000000, event, 'ios')" style="background:linear-gradient(135deg,#007aff,#0051a8);color:#fff;margin-top:5px">🍎 CHẠY FILE 1TR (iOS)</div>
                 </div>
             </div>
         </div>
@@ -892,6 +961,7 @@
                     </div>
                     <h3 id="accName" style="font-size:1.5rem;margin-bottom:5px">User</h3>
                     <div id="premBadge" style="display:none; background:linear-gradient(135deg,var(--prem),#8b5cf6); padding:5px 15px; border-radius:20px; color:#fff; display:inline-flex; align-items:center; gap:5px"><i class="fas fa-crown"></i> PREMIUM</div>
+                    <div id="lockedBadge" style="display:none; background:var(--danger); padding:5px 15px; border-radius:20px; color:#fff; margin-top:5px"><i class="fas fa-lock"></i> TÀI KHOẢN BỊ KHÓA</div>
                     <div id="countdown" class="countdown" style="display:none"><i class="fas fa-clock"></i> <span id="daysLeft">0</span> ngày còn lại</div>
                 </div>
 
@@ -918,13 +988,23 @@
         <!-- Admin Panel -->
         <div class="sec" id="admin">
             <div class="admin-panel">
-                <h2><i class="fas fa-shield-alt"></i> ADMIN CONTROL</h2>
+                <h2><i class="fas fa-shield-alt"></i> ADMIN CONTROL - MÁY CHỦ</h2>
                 <div class="admin-stats">
                     <div class="admin-stat"><b id="totalUsers">0</b><span>Tổng Users</span></div>
                     <div class="admin-stat"><b id="premiumUsers">0</b><span>Premium</span></div>
                     <div class="admin-stat"><b id="pendingDeposits">0</b><span>Chờ duyệt</span></div>
                     <div class="admin-stat"><b id="totalRevenue">0</b><span>Doanh thu</span></div>
                 </div>
+                
+                <div style="display:flex;gap:10px;margin-top:15px;flex-wrap:wrap">
+                    <button class="btn btn-warning" onclick="toggleMaintenance()" id="maintenanceBtn" style="flex:1;max-width:100%"><i class="fas fa-tools"></i> BẬT BẢO TRÌ</button>
+                    <button class="btn btn-success" onclick="exportData()" style="flex:1;max-width:100%"><i class="fas fa-download"></i> SAO LƯU</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-users"></i> QUẢN LÝ NGƯỜI DÙNG</h2>
+                <div class="user-list" id="userList"></div>
             </div>
 
             <div class="card">
@@ -938,16 +1018,23 @@
             </div>
 
             <div class="card">
-                <h2><i class="fas fa-key"></i> TẠO KEY PREMIUM</h2>
+                <h2><i class="fas fa-key"></i> TẠO KEY</h2>
                 <div class="tabs">
-                    <button class="tab act" onclick="switchKeyTab('7day')">7 Ngày</button>
-                    <button class="tab" onclick="switchKeyTab('30day')">30 Ngày</button>
+                    <button class="tab act" onclick="switchKeyTab('7day')">Premium 7N</button>
+                    <button class="tab" onclick="switchKeyTab('30day')">Premium 30N</button>
+                    <button class="tab" onclick="switchKeyTab('1day-prem')">Premium 1N</button>
+                    <button class="tab" onclick="switchKeyTab('1day-free')">Key Thường 1N</button>
                     <button class="tab" onclick="switchKeyTab('free')">Key Free</button>
                 </div>
-                <button class="btn btn-p" onclick="generateKey()" style="max-width:100%;margin-bottom:15px">TẠO KEY MỚI</button>
+                
+                <div style="display:flex;gap:10px;margin-bottom:15px">
+                    <button class="btn btn-p" onclick="generateKey()" style="flex:2">TẠO KEY MỚI</button>
+                    <button class="btn btn-r" onclick="resetAllKeys()" style="flex:1">RESET TẤT CẢ</button>
+                </div>
+                
                 <div id="keyList" style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;font-family:monospace;max-height:200px;overflow-y:auto"></div>
                 <div class="note">
-                    <b>Key Free:</b> Dùng được tất cả tính năng trừ Aim Head và Dọn RAM. Copy và gửi cho khách.
+                    <b>Hướng dẫn:</b> Click vào key để copy. Reset key sẽ làm key cũ không dùng được nữa.
                 </div>
             </div>
         </div>
@@ -966,15 +1053,66 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Thông báo</span></div>
 
     <script>
+        // ==================== DATABASE MÁY CHỦ ====================
         const DB = {
-            accounts: {
-                'free': { pass: 'free123', prem: false, premKey: false, days: 0, balance: 100000, kcBalance: 500, created: Date.now() },
-                'akybaro': { pass: 'admin123', prem: true, premKey: true, days: 9999, balance: 9999999, kcBalance: 9999, isAdmin: true, created: Date.now() }
+            system: {
+                maintenance: false,
+                version: '2.0',
+                lastBackup: Date.now()
             },
-            history: [], pendingDeposits: [], withdrawRequests: [],
-            keys7Day: [], keys30Day: [], keysFree: [], usedKeys: []
+            accounts: {
+                'akybaro': { 
+                    pass: 'admin123', 
+                    prem: true, 
+                    premKey: true, 
+                    days: 9999, 
+                    balance: 9999999, 
+                    kcBalance: 9999, 
+                    isAdmin: true,
+                    locked: false,
+                    created: Date.now(),
+                    firstLogin: Date.now(),
+                    bags: 0,
+                    spins: 0,
+                    files: 0,
+                    fileBags: 0,
+                    inventory: [],
+                    fileInventory: []
+                },
+                'free': { 
+                    pass: 'free123', 
+                    prem: false, 
+                    premKey: false, 
+                    days: 0, 
+                    balance: 100000, 
+                    kcBalance: 500,
+                    isAdmin: false,
+                    locked: false,
+                    created: Date.now(),
+                    firstLogin: Date.now(),
+                    bags: 0,
+                    spins: 0,
+                    files: 0,
+                    fileBags: 0,
+                    inventory: [],
+                    fileInventory: []
+                }
+            },
+            history: [],
+            pendingDeposits: [],
+            withdrawRequests: [],
+            keys: {
+                premium7: [],      // KEY_PREM7_
+                premium30: [],     // KEY_PREM30_
+                premium1day: [],   // KEY_PREM1D_
+                free1day: [],      // KEY_FREE1D_
+                free: []           // KEY_FREE_
+            },
+            usedKeys: [],
+            sessions: {} // Lưu session đang hoạt động
         };
 
+        // Dữ liệu độ nhạy
         const senseData = {
             ip_old: { name: 'iPhone 6/6S/7/8/SE', look: 185, red: 165, s2: 155, s4: 180, fire: 42 },
             ip_x: { name: 'iPhone X/XS/XR/11', look: 179, red: 160, s2: 152, s4: 176, fire: 44 },
@@ -997,61 +1135,143 @@
         let currentUser = null, userData = null, wheelPrice = 9000, spinning = false, currentPrize = 0;
         let selectedCardType = '', selectedDenom = 0, selectedDevice = 'ip_old';
 
+        // ==================== KHỞI TẠO & ĐỒNG BỘ ====================
         function init() {
-            const saved = localStorage.getItem('akybaro_db');
-            if (saved) Object.assign(DB, JSON.parse(saved));
+            // Load database từ localStorage
+            const saved = localStorage.getItem('akybaro_server_db');
+            if (saved) {
+                try {
+                    const loadedDB = JSON.parse(saved);
+                    Object.assign(DB, loadedDB);
+                } catch(e) { console.error('Lỗi load DB'); }
+            }
+            
+            // Kiểm tra session
             const session = localStorage.getItem('akybaro_session');
             if (session) {
-                const s = JSON.parse(session);
-                if (DB.accounts[s.user] && Date.now() - s.time < 24 * 60 * 60 * 1000) restoreSession(s.user);
+                try {
+                    const s = JSON.parse(session);
+                    if (DB.accounts[s.user] && !DB.accounts[s.user].locked && Date.now() - s.time < 24 * 60 * 60 * 1000) {
+                        restoreSession(s.user);
+                    } else {
+                        localStorage.removeItem('akybaro_session');
+                    }
+                } catch(e) {}
             }
+            
+            // Kiểm tra bảo trì hệ thống
+            if (DB.system.maintenance && (!currentUser || !userData?.isAdmin)) {
+                document.getElementById('maintenanceWarning').style.display = 'block';
+            }
+            
             renderDeviceSelector();
+            autoSave();
         }
 
-        function saveDB() { localStorage.setItem('akybaro_db', JSON.stringify(DB)); }
-        function saveSession() { localStorage.setItem('akybaro_session', JSON.stringify({ user: currentUser, time: Date.now() })); }
+        // Tự động lưu DB mỗi 30 giây
+        function autoSave() {
+            setInterval(() => {
+                saveDB();
+                console.log('🔄 Đã đồng bộ dữ liệu máy chủ');
+            }, 30000);
+        }
+
+        function saveDB() { 
+            localStorage.setItem('akybaro_server_db', JSON.stringify(DB)); 
+        }
+        
+        function saveSession() { 
+            if (currentUser) {
+                localStorage.setItem('akybaro_session', JSON.stringify({ user: currentUser, time: Date.now() }));
+                DB.sessions[currentUser] = Date.now();
+            }
+        }
 
         function restoreSession(user) {
+            if (DB.accounts[user]?.locked) {
+                showToast('Tài khoản của bạn đã bị khóa!');
+                return;
+            }
+            
             currentUser = user;
             userData = DB.accounts[user];
+            
+            // Khởi tạo các trường nếu chưa có
             userData.bags = userData.bags || 0;
             userData.spins = userData.spins || 0;
             userData.files = userData.files || 0;
+            userData.fileBags = userData.fileBags || 0;
             userData.kcBalance = userData.kcBalance || 0;
             userData.inventory = userData.inventory || [];
             userData.fileInventory = userData.fileInventory || [];
             userData.firstLogin = userData.firstLogin || Date.now();
+            userData.locked = userData.locked || false;
             
+            // Ẩn login, hiện header và nav
             document.getElementById('login').classList.add('hid');
             document.getElementById('head').style.display = 'flex';
             document.getElementById('nav').style.display = 'flex';
-            if (userData.isAdmin) document.getElementById('admin-quick').style.display = 'block';
+            
+            if (userData.isAdmin) {
+                document.getElementById('admin-quick').style.display = 'block';
+            }
+            
             updateUI();
             go('home');
             showToast('Chào mừng trở lại!');
             if (userData.prem && !userData.isAdmin) startCountdown();
+            
+            // Kiểm tra bảo trì
+            if (DB.system.maintenance && !userData.isAdmin) {
+                document.getElementById('maintenanceWarning').style.display = 'block';
+            }
         }
 
         function doLogin() {
             const u = document.getElementById('user').value.trim();
             const p = document.getElementById('pass').value.trim();
+            
             if (!u || !p) { showToast('Vui lòng nhập đầy đủ thông tin!'); return; }
-            if (p.startsWith('KEY_')) { redeemKey(u, p); return; }
-            if (DB.accounts[u] && DB.accounts[u].pass === p) { restoreSession(u); saveSession(); addHistory('Đăng nhập hệ thống', 0, 'neutral'); } 
-            else showToast('Sai tài khoản hoặc mật khẩu!');
+            
+            // Kiểm tra key
+            if (p.startsWith('KEY_')) { 
+                redeemKey(u, p); 
+                return; 
+            }
+            
+            // Kiểm tra tài khoản
+            if (DB.accounts[u] && DB.accounts[u].pass === p) {
+                if (DB.accounts[u].locked) {
+                    showToast('Tài khoản đã bị khóa! Liên hệ Admin.');
+                    return;
+                }
+                
+                restoreSession(u);
+                saveSession();
+                addHistory('Đăng nhập hệ thống', 0, 'neutral');
+            } else {
+                showToast('Sai tài khoản hoặc mật khẩu!');
+            }
         }
 
+        // ==================== QUẢN LÝ KEY ====================
         function redeemKey(username, key) {
-            const is7Day = key.startsWith('KEY_7_');
-            const is30Day = key.startsWith('KEY_30_');
-            const isFree = key.startsWith('KEY_FREE_');
-            if (!is7Day && !is30Day && !isFree) { showToast('Key không hợp lệ!'); return; }
-            if (DB.usedKeys.includes(key)) { showToast('Key đã được sử dụng!'); return; }
-
-            let days = 0, prem = false, premKey = false;
-            if (isFree) { prem = false; premKey = true; days = 30; } // Key Free: 30 ngày, dùng được mọi tính năng trừ Aim Head và Dọn RAM
-            else { prem = true; premKey = true; days = is7Day ? 7 : 30; }
+            // Kiểm tra key đã dùng chưa
+            if (DB.usedKeys.includes(key)) { 
+                showToast('Key đã được sử dụng!'); 
+                return; 
+            }
             
+            let days = 0, prem = false, premKey = false, keyType = '';
+            
+            if (key.startsWith('KEY_PREM7_')) { days = 7; prem = true; premKey = true; keyType = 'premium7'; }
+            else if (key.startsWith('KEY_PREM30_')) { days = 30; prem = true; premKey = true; keyType = 'premium30'; }
+            else if (key.startsWith('KEY_PREM1D_')) { days = 1; prem = true; premKey = true; keyType = 'premium1day'; }
+            else if (key.startsWith('KEY_FREE1D_')) { days = 1; prem = false; premKey = true; keyType = 'free1day'; }
+            else if (key.startsWith('KEY_FREE_')) { days = 30; prem = false; premKey = true; keyType = 'free'; }
+            else { showToast('Key không hợp lệ!'); return; }
+            
+            // Tạo tài khoản mới với key
             DB.accounts[username] = {
                 pass: 'premium123',
                 prem: prem,
@@ -1059,25 +1279,41 @@
                 days: days,
                 balance: 0,
                 kcBalance: 0,
-                inventory: [], fileInventory: [],
+                isAdmin: false,
+                locked: false,
+                inventory: [],
+                fileInventory: [],
                 firstLogin: Date.now(),
-                created: Date.now()
+                created: Date.now(),
+                bags: 0,
+                spins: 0,
+                files: 0,
+                fileBags: 0
             };
+            
             DB.usedKeys.push(key);
             saveDB();
-            showToast('Kích hoạt thành công!');
+            showToast('Kích hoạt thành công! Mật khẩu: premium123');
             document.getElementById('pass').value = 'premium123';
             doLogin();
         }
 
+        // ==================== UI UPDATE ====================
         function updateUI() {
-            document.getElementById('bal').textContent = userData.balance.toLocaleString();
+            document.getElementById('bal').textContent = (userData.balance || 0).toLocaleString();
             document.getElementById('accName').textContent = currentUser;
             document.getElementById('statBag').textContent = (userData.bags || 0) + (userData.fileBags || 0);
             document.getElementById('statSpin').textContent = userData.spins || 0;
             document.getElementById('statFile').textContent = userData.files || 0;
             document.getElementById('kcBalance').textContent = (userData.kcBalance || 0).toLocaleString() + ' KC';
 
+            // Hiển thị badge premium/locked
+            if (userData.locked) {
+                document.getElementById('lockedBadge').style.display = 'inline-block';
+            } else {
+                document.getElementById('lockedBadge').style.display = 'none';
+            }
+            
             if (userData.prem || userData.premKey) {
                 document.getElementById('premBadge').style.display = 'inline-flex';
                 document.getElementById('menu-sense').classList.remove('lock');
@@ -1087,9 +1323,18 @@
                 document.getElementById('menu-aim').onclick = () => go('aim');
                 document.getElementById('menu-cleaner').onclick = () => go('cleaner');
             } else {
+                document.getElementById('premBadge').style.display = 'none';
                 document.getElementById('menu-sense').classList.add('lock');
                 document.getElementById('menu-aim').classList.add('lock');
                 document.getElementById('menu-cleaner').classList.add('lock');
+            }
+            
+            // Cập nhật admin stats nếu là admin
+            if (userData?.isAdmin) {
+                document.getElementById('admin-users').textContent = Object.keys(DB.accounts).length;
+                document.getElementById('admin-pending').textContent = DB.pendingDeposits.filter(d => d.status === 'pending').length;
+                document.getElementById('admin-premium').textContent = Object.values(DB.accounts).filter(a => a.prem).length;
+                document.getElementById('admin-locked').textContent = Object.values(DB.accounts).filter(a => a.locked).length;
             }
         }
 
@@ -1099,19 +1344,35 @@
             const expireTime = firstLogin + (userData.days * 24 * 60 * 60 * 1000);
             const remaining = Math.max(0, expireTime - now);
             const daysLeft = Math.floor(remaining / (24 * 60 * 60 * 1000));
-            document.getElementById('countdown').style.display = 'flex';
-            document.getElementById('daysLeft').textContent = daysLeft;
-            if (daysLeft <= 0 && !userData.isAdmin) { userData.prem = false; userData.premKey = false; updateUI(); }
+            
+            if (daysLeft > 0 || userData.isAdmin) {
+                document.getElementById('countdown').style.display = 'flex';
+                document.getElementById('daysLeft').textContent = daysLeft;
+            }
+            
+            if (daysLeft <= 0 && !userData.isAdmin) { 
+                userData.prem = false; 
+                userData.premKey = false; 
+                updateUI(); 
+            }
         }
 
         function go(page) {
+            // Kiểm tra bảo trì
+            if (DB.system.maintenance && page !== 'account' && page !== 'home' && !userData?.isAdmin) {
+                showToast('Hệ thống đang bảo trì!');
+                return;
+            }
+            
             document.querySelectorAll('.sec').forEach(s => s.classList.remove('act'));
             document.querySelectorAll('.nav button').forEach(b => b.classList.remove('act'));
+            
             if (['home','bag','bagfile','wheel','filevip','sense','aim','cleaner','shop','deposit','history','account','admin','premium'].includes(page)) 
                 document.getElementById(page).classList.add('act');
+            
             if (page === 'home') document.querySelectorAll('.nav button')[0].classList.add('act');
             if (page === 'account') document.querySelectorAll('.nav button')[3].classList.add('act');
-            if (page === 'admin' && userData.isAdmin) updateAdminPanel();
+            if (page === 'admin' && userData?.isAdmin) updateAdminPanel();
             if (page === 'sense') renderDeviceSelector();
         }
 
@@ -1125,16 +1386,69 @@
             if (!userData.prem) {
                 showModal('Yêu cầu Premium', `${feature === 'aim' ? 'Aim Head' : 'Dọn RAM'} yêu cầu KEY PREMIUM (không dùng Key Free được). Mua ngay trong mục VIP Premium!`, () => closeModal());
             } else {
-                if (feature === 'aim') launchFF(platform);
-                else if (feature === 'cleaner') cleanAndLaunch(platform);
+                // Tự động mở game cho cả Android và iOS
+                showToast(`⚡ Đang xử lý...`);
+                setTimeout(() => {
+                    showToast(`✅ Thành công! Đang vào game...`);
+                    setTimeout(() => {
+                        // Thử mở game bằng các scheme khác nhau
+                        if (platform === 'android') {
+                            window.location.href = 'freefire://';
+                            // Fallback cho Android nếu không mở được
+                            setTimeout(() => {
+                                window.location.href = 'intent://#Intent;scheme=freefire;package=com.dts.freefireth;end;';
+                            }, 500);
+                        } else {
+                            window.location.href = 'freefire://';
+                        }
+                    }, 1500);
+                }, 2000);
             }
         }
 
-        // Buy Bag Acc - Vẫn giữ tỉ lệ cũ nhưng hiển thị Hên Xui
+        // ==================== RUN FILE ====================
+        function runFile(price, event, platform) {
+            event.stopPropagation();
+            
+            if (!userData.prem && !userData.premKey && price > 50000) {
+                showToast('File này yêu cầu Key Premium!');
+                return;
+            }
+            
+            let message = '';
+            if (price === 50000) message = '✅ CÀI ĐẶT THÀNH CÔNG! File nhẹ tâm, bám tâm ổn định.';
+            else if (price === 150000) message = '✅ CÀI ĐẶT THÀNH CÔNG! Bám tâm, nhẹ đầu - Đã làm riêng cho máy bạn.';
+            else if (price === 300000) message = '✅ CÀI ĐẶT THÀNH CÔNG! Bám tâm, nhẹ đầu, aim ẩn kích hoạt.';
+            else if (price === 500000) message = '✅ CÀI ĐẶT THÀNH CÔNG! SIÊU BÁ - Kéo nhẹ là lên đầu.';
+            else if (price === 1000000) message = '✅ CÀI ĐẶT THÀNH CÔNG! QUÁ BÁ - Ngón chân kéo cũng lên đầu.';
+            
+            showToast(`🔄 Đang cài đặt file...`);
+            
+            setTimeout(() => {
+                showToast(message);
+                setTimeout(() => {
+                    showToast(`🚀 Đang mở Free Fire...`);
+                    setTimeout(() => {
+                        if (platform === 'android') {
+                            window.location.href = 'freefire://';
+                            setTimeout(() => {
+                                window.location.href = 'intent://#Intent;scheme=freefire;package=com.dts.freefireth;end;';
+                            }, 500);
+                        } else {
+                            window.location.href = 'freefire://';
+                        }
+                    }, 1000);
+                }, 1500);
+            }, 2000);
+        }
+
+        // ==================== TÚI MÙ ACC ====================
         function buyBag(price, name) {
             if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
+            
             const vipLevel = calculateVIP(price);
             const orderCode = 'ACC' + Date.now().toString(36).toUpperCase();
+            
             showModal('Xác nhận mua', `Mua túi mù ${name}? (Hên xui 100%)`, () => {
                 userData.balance -= price;
                 userData.bags = (userData.bags || 0) + 1;
@@ -1151,26 +1465,123 @@
 
         function calculateVIP(price) {
             const rand = Math.random();
+            
             if (price === 49000) {
                 if (rand < 0.988) return Math.floor(Math.random() * 3); // VIP 0-2: 98.8%
                 else if (rand < 0.999998) return 2 + Math.floor(Math.random() * 3); // VIP 2-4: 1.2%
-                else if (rand < 0.999999) return 4 + Math.floor(Math.random() * 4); // VIP 4-7: 0.0001%
-                else return 8; // VIP 8: 0%
+                else return 4 + Math.floor(Math.random() * 4); // VIP 4-7: cực hiếm
             }
-            else if (price <= 299000) { // 99K-299K
+            else if (price <= 299000) {
                 if (rand < 0.95) return 1 + Math.floor(Math.random() * 3); // VIP 1-3: 95%
-                else if (rand < 0.99999) return 4 + Math.floor(Math.random() * 3); // VIP 4-6: 5%
-                else return 7 + Math.floor(Math.random() * 2); // VIP 7-8: 0%
+                else if (rand < 0.99999) return 4 + Math.floor(Math.random() * 2); // VIP 4-5: 5%
+                else return 6 + Math.floor(Math.random() * 2); // VIP 6-7: cực hiếm
             }
-            else { // 499K-999K
-                if (rand < 0.8) return 2 + Math.floor(Math.random() * 3); // VIP 2-4: 80%
-                else if (rand < 0.95) return 5 + Math.floor(Math.random() * 2); // VIP 5-6: 15%
-                else if (rand < 0.99999) return 7; // VIP 7: 4.999%
-                else return 8; // VIP 8: 0.000001%
+            else if (price === 499000) {
+                if (rand < 0.85) return 2 + Math.floor(Math.random() * 3); // VIP 2-4: 85% (cao)
+                else if (rand < 0.97) return 5; // VIP 5: 12%
+                else if (rand < 0.999) return 6; // VIP 6: 2.9%
+                else return 7; // VIP 7: 0.1%
+            }
+            else { // 999K
+                if (rand < 0.75) return 3 + Math.floor(Math.random() * 3); // VIP 3-5: 75%
+                else if (rand < 0.94) return 6; // VIP 6: 19%
+                else if (rand < 0.999) return 7; // VIP 7: 5.9%
+                else return 8; // VIP 8: 0.1% (cực hiếm)
             }
         }
 
-        // Wheel - Mũi tên chỉ chính xác
+        function buyBagFile(price, name) {
+            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
+            
+            const fileResult = generateFileResult(price);
+            const orderCode = 'FILE' + Date.now().toString(36).toUpperCase();
+            
+            showModal('Xác nhận mua', `Mua ${name}?`, () => {
+                userData.balance -= price;
+                userData.fileBags = (userData.fileBags || 0) + 1;
+                if (!userData.fileInventory) userData.fileInventory = [];
+                userData.fileInventory.push({ type: 'file', fileName: fileResult.name, orderCode, price, status: 'pending', time: Date.now() });
+                addHistory(`Mua ${name} - ${fileResult.name} - Mã: ${orderCode}`, -price, 'out');
+                saveDB(); updateUI(); closeModal();
+                setTimeout(() => {
+                    showModal(`🎉 CHÚC MỪNG!`, `Bạn nhận được: ${fileResult.name}\nMã đơn: ${orderCode}\nGửi Zalo để nhận file!`, () => closeModal());
+                    createConfetti();
+                }, 300);
+            });
+        }
+
+        function generateFileResult(price) {
+            const files = price === 49000 ? [
+                { name: 'AkyBanPhong', weight: 40 }, 
+                { name: 'AkyBaro', weight: 30 }, 
+                { name: 'AkyDeVuongV3', weight: 20 },
+                { name: 'AimHead', weight: 9 }, 
+                { name: 'AimLock', weight: 1 }
+            ] : price === 200000 ? [
+                { name: 'AkyBanPhong Pro', weight: 35 }, 
+                { name: 'AkyBaro Pro', weight: 25 }, 
+                { name: 'AkyDeVuongV3 Pro', weight: 20 },
+                { name: 'Menu FF', weight: 10 }, 
+                { name: 'Panel FF', weight: 9 }, 
+                { name: 'File 500K', weight: 0.9 },
+                { name: 'File 1000K', weight: 0.09 }, 
+                { name: 'File 2000K', weight: 0.01 }
+            ] : [
+                { name: 'AkyBaro Max', weight: 30 }, 
+                { name: 'AkyDeVuongV3 Max', weight: 25 }, 
+                { name: 'Menu VIP', weight: 20 },
+                { name: 'Panel VIP', weight: 15 }, 
+                { name: 'AimLockAn (Độc quyền)', weight: 5 }, 
+                { name: 'File 2 Triệu', weight: 3 },
+                { name: 'File 3 Triệu', weight: 1.5 }, 
+                { name: 'File 5 Triệu', weight: 0.4 }, 
+                { name: 'Key Premium 7 ngày', weight: 0.09 },
+                { name: 'Key Premium 30 ngày', weight: 0.01 }
+            ];
+            
+            const totalWeight = files.reduce((sum, f) => sum + f.weight, 0);
+            let random = Math.random() * totalWeight;
+            for (let file of files) { random -= file.weight; if (random <= 0) return file; }
+            return files[0];
+        }
+
+        function buyFile(price, type) {
+            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
+            
+            showModal('Xác nhận mua', `Mua File VIP ${type} - ${price.toLocaleString()}đ?`, () => {
+                userData.balance -= price;
+                userData.files = (userData.files || 0) + 1;
+                addHistory(`Mua File VIP ${type}`, -price, 'out');
+                saveDB(); updateUI(); showToast('Mua thành công! Liên hệ Zalo để nhận file.'); closeModal();
+            });
+        }
+
+        function buyPremKey(type) {
+            let price = 0, days = 0, name = '';
+            switch(type) {
+                case '1tuần': price = 50000; days = 7; name = '1 Tuần'; break;
+                case '1tháng': price = 150000; days = 30; name = '1 Tháng'; break;
+                case '3tháng': price = 300000; days = 90; name = '3 Tháng'; break;
+                case '6tháng': price = 500000; days = 180; name = '6 Tháng'; break;
+                case 'vĩnhviễn': price = 1000000; days = 3650; name = 'Vĩnh Viễn'; break;
+            }
+            
+            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
+            
+            showModal('Xác nhận mua Premium', `Mua gói ${name} - ${price.toLocaleString()}đ?\nKey sẽ được kích hoạt ngay!`, () => {
+                userData.balance -= price;
+                userData.prem = true;
+                userData.premKey = true;
+                userData.days = days;
+                userData.firstLogin = Date.now();
+                addHistory(`Mua Premium ${name}`, -price, 'prem');
+                saveDB(); updateUI(); closeModal();
+                showToast('Kích hoạt Premium thành công!');
+                startCountdown();
+            });
+        }
+
+        // ==================== VÒNG QUAY ====================
         function setWheel(price, btn) {
             wheelPrice = price;
             document.getElementById('wheelPrice').textContent = price.toLocaleString();
@@ -1181,6 +1592,7 @@
         function spin() {
             if (spinning) return;
             if (userData.balance < wheelPrice) { showToast('Số dư không đủ!'); return; }
+            
             spinning = true;
             userData.balance -= wheelPrice;
             userData.spins = (userData.spins || 0) + 1;
@@ -1193,16 +1605,21 @@
             let weights;
             if (wheelPrice === 9000) {
                 weights = [50, 49.5, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            } else if (wheelPrice === 19000) {
+                weights = [40, 40, 10, 5, 2, 1.5, 1, 0.5, 0, 0, 0, 0];
+            } else if (wheelPrice === 49000) {
+                // 49K: tỉ lệ trên 50 KC cao
+                weights = [20, 20, 15, 20, 10, 8, 5, 1.5, 0.5, 0, 0, 0];
             } else {
-                weights = [30, 25, 20, 15, 0.1, 0.1, 0.1, 0.1, 0.1, 4.3, 4.3, 0.9];
+                // 99K: tỉ lệ KC cao nhất
+                weights = [10, 10, 10, 15, 15, 15, 10, 8, 5, 1, 0.9, 0.1];
             }
             
             currentPrize = weightedRandom(prizes, weights);
             const prizeIndex = prizes.indexOf(currentPrize);
             
-            // Tính toán để mũi tên chỉ đúng phần thưởng
+            // Tính góc quay để mũi tên chỉ đúng phần thưởng
             const baseRotation = 3600 + Math.floor(Math.random() * 360);
-            // Mỗi ô 30 độ, ô đầu tiên ở 15 độ, điều chỉnh để mũi tên (0 độ) chỉ đúng ô
             const targetRotation = baseRotation - (15 + prizeIndex * 30) + (Math.random() * 6 - 3);
             wheel.style.transform = `rotate(${targetRotation}deg)`;
 
@@ -1236,6 +1653,7 @@
         function withdrawKC() {
             const amount = parseInt(document.getElementById('withdrawAmount').value);
             const garenaId = document.getElementById('garenaId').value.trim();
+            
             if (!garenaId) { showToast('Vui lòng nhập ID Garena!'); return; }
             if (!amount || ![113,283,566,1132,2830].includes(amount)) { showToast('Chọn mốc KC hợp lệ!'); return; }
             if ((userData.kcBalance || 0) < amount) { showToast('Số dư KC không đủ!'); return; }
@@ -1243,7 +1661,14 @@
             showModal('Xác nhận rút KC', `Rút ${amount} KC về ID: ${garenaId}?`, () => {
                 userData.kcBalance -= amount;
                 updateUI();
-                DB.withdrawRequests.push({ id: 'WD'+Date.now(), user: currentUser, garenaId, amount, status: 'pending', time: Date.now() });
+                DB.withdrawRequests.push({ 
+                    id: 'WD'+Date.now(), 
+                    user: currentUser, 
+                    garenaId, 
+                    amount, 
+                    status: 'pending', 
+                    time: Date.now() 
+                });
                 saveDB();
                 addHistory(`RÚT ${amount} KC về ID ${garenaId}`, 0, 'out');
                 showToast('Yêu cầu rút đã gửi!');
@@ -1251,48 +1676,7 @@
             });
         }
 
-        function buyFile(price, type) {
-            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
-            showModal('Xác nhận mua', `Mua File VIP ${type} - ${price.toLocaleString()}đ?`, () => {
-                userData.balance -= price;
-                userData.files = (userData.files || 0) + 1;
-                addHistory(`Mua File VIP ${type}`, -price, 'out');
-                saveDB(); updateUI(); showToast('Mua thành công! Liên hệ Zalo để nhận file.'); closeModal();
-            });
-        }
-
-        // Cleaner function - Dọn RAM, tắt tag, xóa cache
-        function cleanAndLaunch(platform) {
-            showToast(`🧹 Đang dọn RAM, tắt tag, xóa bộ nhớ đệm...`);
-            setTimeout(() => {
-                showToast(`✅ Dọn dẹp thành công! Đang vào game...`);
-                setTimeout(() => window.location.href = 'freefire://', 1500);
-            }, 2000);
-        }
-
-        function buyPremKey(type) {
-            let price = 0, days = 0, name = '';
-            switch(type) {
-                case '1tuần': price = 50000; days = 7; name = '1 Tuần'; break;
-                case '1tháng': price = 150000; days = 30; name = '1 Tháng'; break;
-                case '3tháng': price = 300000; days = 90; name = '3 Tháng'; break;
-                case '6tháng': price = 500000; days = 180; name = '6 Tháng'; break;
-                case 'vĩnhviễn': price = 1000000; days = 3650; name = 'Vĩnh Viễn'; break;
-            }
-            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
-            showModal('Xác nhận mua Premium', `Mua gói ${name} - ${price.toLocaleString()}đ?\nKey sẽ được kích hoạt ngay!`, () => {
-                userData.balance -= price;
-                userData.prem = true;
-                userData.premKey = true;
-                userData.days = days;
-                userData.firstLogin = Date.now();
-                addHistory(`Mua Premium ${name}`, -price, 'prem');
-                saveDB(); updateUI(); closeModal();
-                showToast('Kích hoạt Premium thành công!');
-                startCountdown();
-            });
-        }
-
+        // ==================== ĐỘ NHẠY ====================
         function renderDeviceSelector() {
             const selector = document.getElementById('deviceSelector');
             if (!selector) return;
@@ -1318,63 +1702,41 @@
         }
 
         function boostAndLaunch(platform) {
-            showToast(`⚡ Đã xử lí độ mượt cho máy thành công! Đang vào game...`);
-            setTimeout(() => window.location.href = 'freefire://', 2000);
-        }
-
-        function launchFF(platform) {
-            showToast(`Đang khởi chạy Free Fire...`);
-            setTimeout(() => window.location.href = 'freefire://', 1500);
-        }
-
-        function buyBagFile(price, name) {
-            if (userData.balance < price) { showToast('Số dư không đủ!'); return; }
-            const fileResult = generateFileResult(price);
-            const orderCode = 'FILE' + Date.now().toString(36).toUpperCase();
-            showModal('Xác nhận mua', `Mua ${name}?`, () => {
-                userData.balance -= price;
-                userData.fileBags = (userData.fileBags || 0) + 1;
-                if (!userData.fileInventory) userData.fileInventory = [];
-                userData.fileInventory.push({ type: 'file', fileName: fileResult.name, orderCode, price, status: 'pending', time: Date.now() });
-                addHistory(`Mua ${name} - ${fileResult.name} - Mã: ${orderCode}`, -price, 'out');
-                saveDB(); updateUI(); closeModal();
+            showToast(`⚡ Đã xử lí độ mượt cho máy thành công!`);
+            setTimeout(() => {
+                showToast(`🚀 Đang vào game...`);
                 setTimeout(() => {
-                    showModal(`🎉 CHÚC MỪNG!`, `Bạn nhận được: ${fileResult.name}\nMã đơn: ${orderCode}\nGửi Zalo để nhận file!`, () => closeModal());
-                    createConfetti();
-                }, 300);
-            });
+                    if (platform === 'android') {
+                        window.location.href = 'freefire://';
+                        setTimeout(() => {
+                            window.location.href = 'intent://#Intent;scheme=freefire;package=com.dts.freefireth;end;';
+                        }, 500);
+                    } else {
+                        window.location.href = 'freefire://';
+                    }
+                }, 1000);
+            }, 1500);
         }
 
-        function generateFileResult(price) {
-            const files = price === 49000 ? [
-                { name: 'File Free (Cơ bản)', weight: 40 }, { name: 'AkyBanPhong', weight: 30 }, { name: 'AkyBaro', weight: 20 },
-                { name: 'AkyDeVuongV3', weight: 9 }, { name: 'AimHead (2 Triệu)', weight: 0.9 }, { name: 'AimLock', weight: 0.1 }
-            ] : price === 200000 ? [
-                { name: 'AkyBanPhong Pro', weight: 35 }, { name: 'AkyBaro Pro', weight: 25 }, { name: 'AkyDeVuongV3 Pro', weight: 20 },
-                { name: 'Menu FF', weight: 10 }, { name: 'Panel FF', weight: 9 }, { name: 'File 500K', weight: 0.9 },
-                { name: 'File 1000K', weight: 0.09 }, { name: 'File 2000K', weight: 0.01 }
-            ] : [
-                { name: 'AkyBaro Max', weight: 30 }, { name: 'AkyDeVuongV3 Max', weight: 25 }, { name: 'Menu VIP', weight: 20 },
-                { name: 'Panel VIP', weight: 15 }, { name: 'AimLockAn (Độc quyền)', weight: 5 }, { name: 'File 2 Triệu', weight: 3 },
-                { name: 'File 3 Triệu', weight: 1.5 }, { name: 'File 5 Triệu', weight: 0.4 }, { name: 'Key Premium 7 ngày', weight: 0.09 },
-                { name: 'Key Premium 30 ngày', weight: 0.01 }
-            ];
-            const totalWeight = files.reduce((sum, f) => sum + f.weight, 0);
-            let random = Math.random() * totalWeight;
-            for (let file of files) { random -= file.weight; if (random <= 0) return file; }
-            return files[0];
-        }
-
+        // ==================== LỊCH SỬ ====================
         function switchHis(type) {
             document.querySelectorAll('#history .tab').forEach(t => t.classList.remove('act'));
             event.target.classList.add('act');
+            
             const list = document.getElementById('hisList');
             list.innerHTML = '';
+            
             if (type === 'acc') { showAccInventory(); return; }
             if (type === 'file') { showFileInventory(); return; }
+            
             let filtered = DB.history.filter(h => h.user === currentUser);
             if (type !== 'all') filtered = filtered.filter(h => h.type === type);
-            if (filtered.length === 0) { list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Không có lịch sử</p>'; return; }
+            
+            if (filtered.length === 0) { 
+                list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Không có lịch sử</p>'; 
+                return; 
+            }
+            
             filtered.slice().reverse().forEach(h => {
                 const div = document.createElement('div');
                 div.className = `his ${h.type === 'in' ? 'd' : h.type === 'out' ? 'r' : h.type === 'game' ? 'b' : ''}`;
@@ -1386,7 +1748,12 @@
         function showAccInventory() {
             const list = document.getElementById('hisList');
             list.innerHTML = '';
-            if (!userData.inventory?.length) { list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Chưa mua acc nào</p>'; return; }
+            
+            if (!userData.inventory?.length) { 
+                list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Chưa mua acc nào</p>'; 
+                return; 
+            }
+            
             userData.inventory.slice().reverse().forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'his acc';
@@ -1398,7 +1765,12 @@
         function showFileInventory() {
             const list = document.getElementById('hisList');
             list.innerHTML = '';
-            if (!userData.fileInventory?.length) { list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Chưa mua file nào</p>'; return; }
+            
+            if (!userData.fileInventory?.length) { 
+                list.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.5">Chưa mua file nào</p>'; 
+                return; 
+            }
+            
             userData.fileInventory.slice().reverse().forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'his acc';
@@ -1413,6 +1785,7 @@
             saveDB();
         }
 
+        // ==================== NẠP TIỀN ====================
         function switchDep(type) {
             document.querySelectorAll('#deposit .tab').forEach(t => t.classList.remove('act'));
             event.target.classList.add('act');
@@ -1435,106 +1808,249 @@
         function submitCard() {
             const code = document.getElementById('cardCode').value;
             const seri = document.getElementById('cardSeri').value;
+            
             if (!selectedCardType) { showToast('Chọn loại thẻ!'); return; }
             if (!selectedDenom) { showToast('Chọn mệnh giá!'); return; }
             if (!code || !seri) { showToast('Điền đầy đủ thông tin!'); return; }
-            DB.pendingDeposits.push({ id: 'CRD'+Date.now(), user: currentUser, type: 'card', cardType: selectedCardType, denomination: selectedDenom, code, seri, status: 'pending', time: Date.now() });
+            
+            DB.pendingDeposits.push({ 
+                id: 'CRD'+Date.now(), 
+                user: currentUser, 
+                type: 'card', 
+                cardType: selectedCardType, 
+                denomination: selectedDenom, 
+                code, 
+                seri, 
+                status: 'pending', 
+                time: Date.now() 
+            });
+            
             saveDB();
             showToast('Đã gửi thẻ! Đang chờ xử lý...');
-            document.getElementById('cardCode').value = ''; document.getElementById('cardSeri').value = '';
+            document.getElementById('cardCode').value = ''; 
+            document.getElementById('cardSeri').value = '';
             document.querySelectorAll('.denom-btn').forEach(b => b.classList.remove('selected'));
             selectedDenom = 0;
         }
 
+        // ==================== ADMIN PANEL ====================
         function updateAdminPanel() {
             document.getElementById('totalUsers').textContent = Object.keys(DB.accounts).length;
             document.getElementById('premiumUsers').textContent = Object.values(DB.accounts).filter(a => a.prem).length;
             document.getElementById('pendingDeposits').textContent = DB.pendingDeposits.filter(d => d.status === 'pending').length;
+            
             const revenue = DB.history.reduce((sum, h) => sum + (h.amount > 0 ? h.amount : 0), 0);
             document.getElementById('totalRevenue').textContent = (revenue / 1000000).toFixed(1) + 'M';
             
+            // Hiển thị danh sách user
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            
+            Object.entries(DB.accounts).forEach(([name, data]) => {
+                const div = document.createElement('div');
+                div.className = `user-item ${data.locked ? 'user-locked' : ''}`;
+                div.innerHTML = `
+                    <div class="user-info">
+                        <h4>${name} ${data.isAdmin ? '👑' : ''} ${data.prem ? '💎' : ''}</h4>
+                        <small>💰 ${(data.balance || 0).toLocaleString()}đ | 💎 ${(data.kcBalance || 0)} KC</small><br>
+                        <small>📅 ${new Date(data.created || Date.now()).toLocaleDateString()}</small>
+                    </div>
+                    <div class="user-actions">
+                        ${!data.isAdmin ? `
+                            <button class="btn-warning" onclick="resetUserKey('${name}')" style="background:var(--warning)">🔄 Key</button>
+                            <button class="btn-${data.locked ? 'success' : 'danger'}" onclick="toggleLockUser('${name}')" style="background:${data.locked ? 'var(--success)' : 'var(--danger)'}">
+                                ${data.locked ? '🔓' : '🔒'}
+                            </button>
+                            <button class="btn-danger" onclick="kickUser('${name}')" style="background:var(--danger)">👢</button>
+                        ` : '<span>ADMIN</span>'}
+                    </div>
+                `;
+                userList.appendChild(div);
+            });
+            
+            // Danh sách rút KC
             const withdraws = DB.withdrawRequests.filter(w => w.status === 'pending');
             document.getElementById('withdrawList').innerHTML = withdraws.length ? withdraws.map(w => `
                 <div class="his" style="margin-bottom:10px;background:rgba(0,212,255,0.1)">
-                    <div><b>${w.user}</b><br><small>${w.amount} KC → ID: ${w.garenaId}</small></div>
+                    <div><b>${w.user}</b><br><small>${w.amount} KC → ID: ${w.garenaId}</small><br><small>${new Date(w.time).toLocaleString()}</small></div>
                     <div><button class="btn btn-b" onclick="approveWithdraw('${w.id}')" style="padding:5px 10px">Duyệt</button>
                     <button class="btn btn-r" onclick="rejectWithdraw('${w.id}')" style="padding:5px 10px">Hủy</button></div>
                 </div>`).join('') : '<p style="text-align:center;padding:20px;opacity:0.5">Không có yêu cầu</p>';
             
+            // Danh sách nạp tiền
             const pending = DB.pendingDeposits.filter(d => d.status === 'pending');
             document.getElementById('pendingList').innerHTML = pending.length ? pending.map(d => `
                 <div class="his" style="margin-bottom:10px">
-                    <div><b>${d.user}</b><br><small>${d.type==='bank'?'Bank':d.cardType+' - '+d.denomination}</small></div>
+                    <div><b>${d.user}</b><br><small>${d.type==='bank'?'Bank':d.cardType+' - '+d.denomination.toLocaleString()}đ</small><br><small>${new Date(d.time).toLocaleString()}</small></div>
                     <div><button class="btn btn-p" onclick="approveDeposit('${d.id}')" style="padding:5px 10px">Duyệt</button>
                     <button class="btn btn-r" onclick="rejectDeposit('${d.id}')" style="padding:5px 10px">Hủy</button></div>
                 </div>`).join('') : '<p style="text-align:center;padding:20px;opacity:0.5">Không có giao dịch</p>';
             
-            const users = Object.entries(DB.accounts);
-            document.getElementById('userList').innerHTML = users.map(([name, data]) => `
-                <div class="his" style="margin-bottom:5px">
-                    <div><b>${name}</b> ${data.prem?'<span style="color:var(--g)">[PREM]</span>':''}<br><small>${data.balance.toLocaleString()}đ | ${data.kcBalance||0} KC</small></div>
-                    <button class="btn btn-r" onclick="deleteUser('${name}')" style="padding:5px 10px">Xóa</button>
-                </div>`).join('');
+            // Cập nhật nút bảo trì
+            document.getElementById('maintenanceBtn').innerHTML = DB.system.maintenance ? 
+                '<i class="fas fa-check"></i> TẮT BẢO TRÌ' : 
+                '<i class="fas fa-tools"></i> BẬT BẢO TRÌ';
+        }
+
+        function toggleMaintenance() {
+            DB.system.maintenance = !DB.system.maintenance;
+            saveDB();
+            updateAdminPanel();
+            showToast(DB.system.maintenance ? '🔧 Hệ thống đang bảo trì' : '✅ Hệ thống hoạt động lại');
+            
+            if (DB.system.maintenance) {
+                document.getElementById('maintenanceWarning').style.display = 'block';
+            } else {
+                document.getElementById('maintenanceWarning').style.display = 'none';
+            }
+        }
+
+        function toggleLockUser(username) {
+            if (DB.accounts[username]) {
+                DB.accounts[username].locked = !DB.accounts[username].locked;
+                saveDB();
+                updateAdminPanel();
+                showToast(`${username} đã ${DB.accounts[username].locked ? 'bị khóa' : 'mở khóa'}`);
+                
+                // Xóa session nếu bị khóa
+                if (DB.accounts[username].locked && DB.sessions[username]) {
+                    delete DB.sessions[username];
+                }
+            }
+        }
+
+        function resetUserKey(username) {
+            if (!DB.accounts[username]) return;
+            
+            // Tạo key mới
+            const newKey = 'KEY_PREM30_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+            DB.keys.premium30.push(newKey);
+            
+            // Vô hiệu hóa key cũ (nếu có) bằng cách thêm vào usedKeys
+            const oldPass = DB.accounts[username].pass;
+            if (oldPass && oldPass.startsWith('KEY_')) {
+                DB.usedKeys.push(oldPass);
+            }
+            
+            // Đổi mật khẩu
+            DB.accounts[username].pass = newKey;
+            
+            saveDB();
+            updateAdminPanel();
+            showToast(`Đã reset key cho ${username}. Key mới: ${newKey}`);
+        }
+
+        function kickUser(username) {
+            if (DB.sessions[username]) {
+                delete DB.sessions[username];
+                showToast(`Đã đá user ${username} ra khỏi hệ thống`);
+            }
         }
 
         function approveWithdraw(id) {
             const req = DB.withdrawRequests.find(w => w.id === id);
             if (!req) return;
+            
             req.status = 'approved';
             addHistory(`Rút ${req.amount} KC (đã duyệt)`, 0, 'out');
-            saveDB(); updateAdminPanel(); showToast('Đã duyệt rút KC!');
+            saveDB(); 
+            updateAdminPanel(); 
+            showToast('Đã duyệt rút KC!');
         }
 
         function rejectWithdraw(id) {
             const req = DB.withdrawRequests.find(w => w.id === id);
             if (req) {
                 req.status = 'rejected';
-                if (DB.accounts[req.user]) DB.accounts[req.user].kcBalance += req.amount;
-                saveDB(); updateAdminPanel(); showToast('Đã hủy và hoàn KC!');
+                if (DB.accounts[req.user]) {
+                    DB.accounts[req.user].kcBalance = (DB.accounts[req.user].kcBalance || 0) + req.amount;
+                }
+                saveDB(); 
+                updateAdminPanel(); 
+                showToast('Đã hủy và hoàn KC!');
             }
         }
 
         function approveDeposit(id) {
             const deposit = DB.pendingDeposits.find(d => d.id === id);
             if (!deposit) return;
-            const amount = prompt('Nhập số tiền cần cộng:');
+            
+            const amount = prompt('Nhập số tiền cần cộng (sau chiết khấu):');
             if (!amount) return;
+            
             deposit.status = 'approved';
-            DB.accounts[deposit.user].balance += parseInt(amount);
+            DB.accounts[deposit.user].balance = (DB.accounts[deposit.user].balance || 0) + parseInt(amount);
             addHistory('Nạp tiền ' + (deposit.type==='bank'?'Bank':'Thẻ'), parseInt(amount), 'in');
-            saveDB(); updateAdminPanel(); showToast('Đã duyệt giao dịch!');
+            saveDB(); 
+            updateAdminPanel(); 
+            showToast('Đã duyệt giao dịch!');
         }
 
         function rejectDeposit(id) {
             const deposit = DB.pendingDeposits.find(d => d.id === id);
-            if (deposit) { deposit.status = 'rejected'; saveDB(); updateAdminPanel(); }
-        }
-
-        function deleteUser(name) {
-            if (confirm('Xóa user ' + name + '?')) { delete DB.accounts[name]; saveDB(); updateAdminPanel(); }
+            if (deposit) { 
+                deposit.status = 'rejected'; 
+                saveDB(); 
+                updateAdminPanel(); 
+            }
         }
 
         function generateKey() {
             const activeTab = document.querySelector('#admin .tab.act').textContent;
-            let prefix = 'KEY_';
-            if (activeTab.includes('7')) prefix += '7_';
-            else if (activeTab.includes('30')) prefix += '30_';
-            else prefix += 'FREE_';
+            let prefix = '';
+            let keyArray = null;
+            
+            if (activeTab.includes('7')) { prefix = 'KEY_PREM7_'; keyArray = 'premium7'; }
+            else if (activeTab.includes('30')) { prefix = 'KEY_PREM30_'; keyArray = 'premium30'; }
+            else if (activeTab.includes('1N')) {
+                if (activeTab.includes('Premium')) { prefix = 'KEY_PREM1D_'; keyArray = 'premium1day'; }
+                else { prefix = 'KEY_FREE1D_'; keyArray = 'free1day'; }
+            }
+            else { prefix = 'KEY_FREE_'; keyArray = 'free'; }
             
             const key = prefix + Math.random().toString(36).substring(2, 10).toUpperCase();
-            
-            if (activeTab.includes('7')) DB.keys7Day.push(key);
-            else if (activeTab.includes('30')) DB.keys30Day.push(key);
-            else DB.keysFree.push(key);
-            
+            DB.keys[keyArray].push(key);
             saveDB();
             updateKeyList();
+            showToast(`Đã tạo key: ${key}`);
+        }
+
+        function resetAllKeys() {
+            if (confirm('RESET TẤT CẢ KEY? Key cũ sẽ không dùng được nữa!')) {
+                // Chuyển tất cả key hiện tại vào usedKeys
+                Object.values(DB.keys).forEach(keyArray => {
+                    keyArray.forEach(key => DB.usedKeys.push(key));
+                });
+                
+                // Xóa tất cả key
+                DB.keys = { premium7: [], premium30: [], premium1day: [], free1day: [], free: [] };
+                saveDB();
+                updateKeyList();
+                showToast('Đã reset tất cả key!');
+            }
         }
 
         function updateKeyList() {
             const list = document.getElementById('keyList');
-            const allKeys = [...DB.keys7Day, ...DB.keys30Day, ...DB.keysFree].filter(k => !DB.usedKeys.includes(k));
-            list.innerHTML = allKeys.map(k => `<div style="padding:5px;border-bottom:1px solid rgba(255,255,255,0.1)">${k}</div>`).join('') || '<div style="color:rgba(255,255,255,0.5)">Chưa có key</div>';
+            const allKeys = [
+                ...DB.keys.premium7.map(k => ({ key: k, type: 'P7' })),
+                ...DB.keys.premium30.map(k => ({ key: k, type: 'P30' })),
+                ...DB.keys.premium1day.map(k => ({ key: k, type: 'P1D' })),
+                ...DB.keys.free1day.map(k => ({ key: k, type: 'F1D' })),
+                ...DB.keys.free.map(k => ({ key: k, type: 'F' }))
+            ].filter(k => !DB.usedKeys.includes(k.key));
+            
+            list.innerHTML = allKeys.map(k => 
+                `<div style="padding:5px;border-bottom:1px solid rgba(255,255,255,0.1);cursor:pointer" onclick="copyKey('${k.key}')" title="Click để copy">
+                    <span style="color:${k.type.startsWith('P') ? 'var(--p)' : 'var(--b)'}">[${k.type}]</span> ${k.key}
+                </div>`
+            ).join('') || '<div style="color:rgba(255,255,255,0.5)">Chưa có key</div>';
+        }
+
+        function copyKey(key) {
+            navigator.clipboard.writeText(key).then(() => {
+                showToast('Đã copy key!');
+            });
         }
 
         function switchKeyTab(type) {
@@ -1542,8 +2058,25 @@
             event.target.classList.add('act');
         }
 
+        function exportData() {
+            const dataStr = JSON.stringify(DB, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `akybaro_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            showToast('Đã sao lưu dữ liệu!');
+        }
+
+        // ==================== LOGOUT ====================
         function logout() {
-            currentUser = null; userData = null;
+            if (currentUser) {
+                delete DB.sessions[currentUser];
+            }
+            
+            currentUser = null; 
+            userData = null;
             localStorage.removeItem('akybaro_session');
             document.getElementById('login').classList.remove('hid');
             document.getElementById('head').style.display = 'none';
@@ -1552,20 +2085,29 @@
             showToast('Đã đăng xuất!');
         }
 
+        // ==================== UTILITIES ====================
         function showModal(title, text, onConfirm) {
             document.getElementById('modTitle').textContent = title;
             document.getElementById('modText').textContent = text;
             document.getElementById('modal').classList.add('act');
             window.confirmCallback = onConfirm;
         }
-        function closeModal() { document.getElementById('modal').classList.remove('act'); }
-        function confirmModal() { if (window.confirmCallback) window.confirmCallback(); }
+        
+        function closeModal() { 
+            document.getElementById('modal').classList.remove('act'); 
+        }
+        
+        function confirmModal() { 
+            if (window.confirmCallback) window.confirmCallback(); 
+        }
+        
         function showToast(msg) {
             const t = document.getElementById('toast');
             document.getElementById('toastMsg').textContent = msg;
             t.classList.add('act');
             setTimeout(() => t.classList.remove('act'), 3000);
         }
+        
         function createConfetti() {
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
@@ -1577,6 +2119,7 @@
                 setTimeout(() => confetti.remove(), 4000);
             }
         }
+        
         function switchTab(el, tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('act'));
             el.classList.add('act');
@@ -1585,6 +2128,8 @@
         }
 
         document.getElementById('pass').addEventListener('keypress', e => { if (e.key === 'Enter') doLogin(); });
+        
+        // Khởi tạo
         init();
     </script>
 </body>
